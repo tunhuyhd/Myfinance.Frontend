@@ -4,11 +4,29 @@ import { useQuery } from '@tanstack/react-query';
 import { accountService, Account } from '@/services/accounts.service';
 import { Wallet, Plus, MoreHorizontal, AlertCircle, CreditCard, Landmark, Banknote } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { CreateAccountModal } from '@/components/accounts/CreateAccountModal';
+import { EditAccountModal } from '@/components/accounts/EditAccountModal';
+import { DeleteAccountDialog } from '@/components/accounts/DeleteAccountDialog';
+import { Pencil, Trash2 } from 'lucide-react';
 
 export default function AccountsPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [editingAccount, setEditingAccount] = useState<Account | null>(null);
+  const [deletingAccount, setDeletingAccount] = useState<Account | null>(null);
+  const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
+
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(null);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const { data: accounts, isLoading, error } = useQuery({
     queryKey: ['accounts'],
@@ -96,7 +114,7 @@ export default function AccountsPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" ref={dropdownRef}>
         {accounts?.map((account) => (
           <div key={account.id} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative group">
             {account.isDefault && (
@@ -112,9 +130,39 @@ export default function AccountsPage() {
               >
                 {getAccountIcon(account.accountType)}
               </div>
-              <button className="text-gray-400 hover:text-gray-600 p-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <MoreHorizontal className="w-5 h-5" />
-              </button>
+              <div className="relative">
+                <button 
+                  onClick={() => setDropdownOpen(dropdownOpen === account.id ? null : account.id)}
+                  className="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  <MoreHorizontal className="w-5 h-5" />
+                </button>
+                
+                {dropdownOpen === account.id && (
+                  <div className="absolute right-0 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-20 animate-in fade-in slide-in-from-top-2">
+                    <button 
+                      onClick={() => {
+                        setEditingAccount(account);
+                        setDropdownOpen(null);
+                      }}
+                      className="w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors"
+                    >
+                      <Pencil className="w-4 h-4" />
+                      Sửa ví
+                    </button>
+                    <button 
+                      onClick={() => {
+                        setDeletingAccount(account);
+                        setDropdownOpen(null);
+                      }}
+                      className="w-full px-4 py-2 text-sm text-left text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                      Xóa ví
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
             
             <div>
@@ -126,6 +174,18 @@ export default function AccountsPage() {
       </div>
 
       <CreateAccountModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
+      
+      <EditAccountModal 
+        isOpen={!!editingAccount} 
+        onClose={() => setEditingAccount(null)} 
+        account={editingAccount} 
+      />
+      
+      <DeleteAccountDialog 
+        isOpen={!!deletingAccount} 
+        onClose={() => setDeletingAccount(null)} 
+        account={deletingAccount} 
+      />
     </div>
   );
 }

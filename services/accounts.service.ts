@@ -26,6 +26,7 @@ export interface UpdateAccountRequest {
   name: string;
   color: string;
   icon: string;
+  isDefault: boolean;
 }
 
 export const accountService = {
@@ -39,7 +40,7 @@ export const accountService = {
     return response.data;
   },
 
-  createAccount: async (data: CreateAccountRequest): Promise<string> => {
+  createAccount: async (data: CreateAccountRequest): Promise<Account> => {
     const response = await api.post('/Accounts', data);
     return response.data;
   },
