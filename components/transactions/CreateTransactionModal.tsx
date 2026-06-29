@@ -8,8 +8,9 @@ import { transactionService, CreateTransactionRequest } from '@/services/transac
 import { accountService } from '@/services/accounts.service';
 import { categoryService } from '@/services/categories.service';
 import { toast } from 'sonner';
-import { Loader2, X, ArrowDownCircle, ArrowUpCircle, ArrowRightLeft } from 'lucide-react';
-import { useEffect } from 'react';
+import { Loader2, X, ArrowDownCircle, ArrowUpCircle, ArrowRightLeft, ChevronDown, Check } from 'lucide-react';
+import { useEffect, useState, useRef } from 'react';
+import { getCategoryIcon } from '@/constants/categories';
 
 const createTransactionSchema = z.object({
   accountId: z.string().min(1, 'Vui lòng chọn ví'),
@@ -52,6 +53,19 @@ interface CreateTransactionModalProps {
 
 export function CreateTransactionModal({ isOpen, onClose }: CreateTransactionModalProps) {
   const queryClient = useQueryClient();
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsCategoryOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const { data: accounts } = useQuery({
     queryKey: ['accounts'],
@@ -84,6 +98,9 @@ export function CreateTransactionModal({ isOpen, onClose }: CreateTransactionMod
     queryFn: () => categoryService.getCategories(selectedType),
     enabled: isOpen,
   });
+
+  const selectedCategoryId = watch('categoryId');
+  const selectedCategoryObj = categories?.find(c => c.id === selectedCategoryId);
 
   useEffect(() => {
     if (isOpen) {
@@ -132,7 +149,7 @@ export function CreateTransactionModal({ isOpen, onClose }: CreateTransactionMod
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm">
-      <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
         <div className="flex items-center justify-between p-6 border-b border-gray-100">
           <h2 className="text-xl font-semibold text-gray-900">Thêm Giao dịch</h2>
           <button
@@ -271,23 +288,78 @@ export function CreateTransactionModal({ isOpen, onClose }: CreateTransactionMod
           )}
 
           {selectedType !== 3 && (
-            <div>
+            <div className="relative" ref={dropdownRef}>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 Danh mục
               </label>
-              <select
-                {...register('categoryId')}
-                className={`w-full px-4 py-2.5 rounded-xl border ${
-                  errors.categoryId ? 'border-red-300 focus:ring-red-500' : 'border-gray-200 focus:border-primary-500 focus:ring-primary-500'
-                } focus:outline-none focus:ring-2 focus:ring-opacity-20 transition-all bg-white`}
+              
+              <button
+                type="button"
+                onClick={() => setIsCategoryOpen(!isCategoryOpen)}
+                className={`w-full px-4 py-2.5 rounded-xl border flex items-center justify-between bg-white transition-all ${
+                  errors.categoryId ? 'border-red-300 ring-1 ring-red-500' : 'border-gray-200 hover:border-gray-300'
+                } ${isCategoryOpen ? 'border-primary-500 ring-2 ring-primary-500/20' : ''}`}
               >
-                <option value="">-- Chọn danh mục --</option>
-                {categories?.map((cat) => (
-                  <option key={cat.id} value={cat.id}>
-                    {cat.name}
-                  </option>
-                ))}
-              </select>
+                {selectedCategoryObj ? (
+                  <div className="flex items-center gap-3">
+                    <div 
+                      className="w-6 h-6 rounded-md flex items-center justify-center"
+                      style={{ backgroundColor: `${selectedCategoryObj.color}15`, color: selectedCategoryObj.color }}
+                    >
+                      {(() => {
+                        const Icon = getCategoryIcon(selectedCategoryObj.icon);
+                        return <Icon className="w-4 h-4" />;
+                      })()}
+                    </div>
+                    <span className="font-medium text-gray-900">{selectedCategoryObj.name}</span>
+                  </div>
+                ) : (
+                  <span className="text-gray-500">-- Chọn danh mục --</span>
+                )}
+                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isCategoryOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {isCategoryOpen && (
+                <div className="absolute z-10 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-lg max-h-60 overflow-auto py-1">
+                  {categories?.map((cat) => {
+                    const Icon = getCategoryIcon(cat.icon);
+                    const isSelected = selectedCategoryId === cat.id;
+                    
+                    return (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => {
+                          setValue('categoryId', cat.id, { shouldValidate: true });
+                          setIsCategoryOpen(false);
+                        }}
+                        className={`w-full flex items-center justify-between px-4 py-2.5 hover:bg-gray-50 transition-colors ${
+                          isSelected ? 'bg-primary-50/50' : ''
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div 
+                            className="w-8 h-8 rounded-lg flex items-center justify-center"
+                            style={{ backgroundColor: `${cat.color}15`, color: cat.color }}
+                          >
+                            <Icon className="w-4 h-4" />
+                          </div>
+                          <span className={`text-sm ${isSelected ? 'font-semibold text-gray-900' : 'font-medium text-gray-700'}`}>
+                            {cat.name}
+                          </span>
+                        </div>
+                        {isSelected && <Check className="w-4 h-4 text-primary-600" />}
+                      </button>
+                    );
+                  })}
+                  {categories?.length === 0 && (
+                    <div className="px-4 py-3 text-sm text-gray-500 text-center">
+                      Chưa có danh mục nào
+                    </div>
+                  )}
+                </div>
+              )}
+              
               {errors.categoryId && (
                 <p className="mt-1 text-sm text-red-500">{errors.categoryId.message}</p>
               )}

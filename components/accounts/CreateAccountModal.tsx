@@ -32,6 +32,7 @@ const ACCOUNT_TYPES = [
   { id: 3, label: 'Tiền mặt' },
   { id: 4, label: 'Thẻ tín dụng' },
   { id: 5, label: 'Đầu tư' },
+  { id: 6, label: 'Ví điện tử' },
 ];
 
 const COLORS = [

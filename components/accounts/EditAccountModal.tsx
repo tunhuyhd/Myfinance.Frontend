@@ -131,7 +131,8 @@ export function EditAccountModal({ isOpen, onClose, account }: EditAccountModalP
                   account.accountType.toString() === '1' ? 'Ngân hàng / Debit' :
                   account.accountType.toString() === '2' ? 'Tiết kiệm' :
                   account.accountType.toString() === '3' ? 'Tiền mặt' :
-                  account.accountType.toString() === '4' ? 'Thẻ tín dụng' : 'Đầu tư'
+                  account.accountType.toString() === '4' ? 'Thẻ tín dụng' :
+                  account.accountType.toString() === '5' ? 'Đầu tư' : 'Ví điện tử'
                 }
                 className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-gray-500 cursor-not-allowed"
               />

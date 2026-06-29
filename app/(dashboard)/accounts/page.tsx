@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { accountService, Account } from '@/services/accounts.service';
-import { Wallet, Plus, MoreHorizontal, AlertCircle, CreditCard, Landmark, Banknote } from 'lucide-react';
+import { Wallet, Plus, MoreHorizontal, AlertCircle, CreditCard, Landmark, Banknote, Smartphone, TrendingUp } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 import { useState, useRef, useEffect } from 'react';
 import { CreateAccountModal } from '@/components/accounts/CreateAccountModal';
@@ -37,17 +37,13 @@ export default function AccountsPage() {
     if (type == null) return <Wallet className="w-6 h-6" />;
     const strType = String(type).toLowerCase();
     switch (strType) {
-      case 'cash': 
-      case '0': 
-        return <Banknote className="w-6 h-6" />;
-      case 'creditcard': 
-      case '3': 
-        return <CreditCard className="w-6 h-6" />;
-      case 'savings': 
-      case '2': 
-        return <Landmark className="w-6 h-6" />;
-      default: 
-        return <Wallet className="w-6 h-6" />;
+      case '1': return <Wallet className="w-6 h-6" />; // Checking/Bank
+      case '2': return <Landmark className="w-6 h-6" />; // Savings
+      case '3': return <Banknote className="w-6 h-6" />; // Cash
+      case '4': return <CreditCard className="w-6 h-6" />; // CreditCard
+      case '5': return <TrendingUp className="w-6 h-6" />; // Investment
+      case '6': return <Smartphone className="w-6 h-6" />; // EWallet
+      default: return <Wallet className="w-6 h-6" />;
     }
   };
 
