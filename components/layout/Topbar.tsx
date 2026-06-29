@@ -82,10 +82,10 @@ export function Topbar() {
                 onClick={() => setShowDropdown(false)}
               ></div>
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-40 animate-in fade-in slide-in-from-top-2">
-                <button className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
+                <Link href="/profile" onClick={() => setShowDropdown(false)} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-2">
                   <UserIcon className="w-4 h-4" />
                   <span>Hồ sơ cá nhân</span>
-                </button>
+                </Link>
                 <div className="h-px bg-gray-100 my-1"></div>
                 <button 
                   onClick={handleLogout}
