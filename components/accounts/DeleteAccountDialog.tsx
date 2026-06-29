@@ -30,15 +30,15 @@ export function DeleteAccountDialog({ isOpen, onClose, account }: DeleteAccountD
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm">
-      <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="bg-white rounded-3xl w-full max-w-md shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-slate-200">
         <div className="p-6 text-center">
           <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-6">
             <AlertTriangle className="h-8 w-8 text-red-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">
+          <h3 className="text-xl font-bold text-slate-900 tracking-tight mb-2">
             Xóa ví "{account.name}"?
           </h3>
-          <p className="text-sm text-gray-500 mb-6">
+          <p className="text-sm font-medium text-slate-500 mb-6">
             Hành động này sẽ xóa hoàn toàn ví của bạn. Tất cả các giao dịch thu/chi liên quan đến ví này cũng có thể bị mất. Bạn không thể hoàn tác hành động này.
           </p>
 
@@ -46,14 +46,14 @@ export function DeleteAccountDialog({ isOpen, onClose, account }: DeleteAccountD
             <button
               onClick={onClose}
               disabled={mutation.isPending}
-              className="flex-1 px-5 py-2.5 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors disabled:opacity-70"
+              className="flex-1 px-5 py-3 text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors disabled:opacity-70"
             >
               Hủy
             </button>
             <button
               onClick={() => mutation.mutate()}
               disabled={mutation.isPending}
-              className="flex-1 flex items-center justify-center px-5 py-2.5 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-xl transition-colors disabled:opacity-70"
+              className="flex-1 flex items-center justify-center px-5 py-3 text-sm font-bold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-all disabled:opacity-70 shadow-md shadow-red-500/20 hover:scale-105 active:scale-95"
             >
               {mutation.isPending ? (
                 <Loader2 className="w-5 h-5 animate-spin" />

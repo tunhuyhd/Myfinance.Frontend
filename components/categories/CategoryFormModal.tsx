@@ -101,14 +101,14 @@ export function CategoryFormModal({ isOpen, onClose, type, editingCategory }: Ca
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm">
-      <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-        <div className="flex items-center justify-between p-6 border-b border-gray-100">
-          <h2 className="text-xl font-semibold text-gray-900">
+      <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-slate-200">
+        <div className="flex items-center justify-between p-6 border-b border-slate-100">
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">
             {isEditing ? 'Sửa Danh mục' : 'Thêm Danh mục'}
           </h2>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -116,24 +116,24 @@ export function CategoryFormModal({ isOpen, onClose, type, editingCategory }: Ca
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-bold text-slate-700 mb-1.5">
               Tên danh mục
             </label>
             <input
               {...register('name')}
               type="text"
               placeholder="VD: Ăn uống, Lương..."
-              className={`w-full px-4 py-2.5 rounded-xl border ${
-                errors.name ? 'border-red-300 focus:ring-red-500' : 'border-gray-200 focus:border-primary-500 focus:ring-primary-500'
-              } focus:outline-none focus:ring-2 focus:ring-opacity-20 transition-all`}
+              className={`w-full px-4 py-3 rounded-xl border bg-slate-50 focus:bg-white ${
+                errors.name ? 'border-red-300 focus:ring-red-500' : 'border-slate-200 focus:border-slate-900 focus:ring-slate-900'
+              } focus:outline-none focus:ring-2 focus:ring-opacity-20 transition-all font-medium`}
             />
             {errors.name && (
-              <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
+              <p className="mt-1 text-sm text-red-500 font-medium">{errors.name.message}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-sm font-bold text-slate-700 mb-3">
               Màu sắc
             </label>
             <div className="flex flex-wrap gap-3">
@@ -157,7 +157,7 @@ export function CategoryFormModal({ isOpen, onClose, type, editingCategory }: Ca
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-3">
+            <label className="block text-sm font-bold text-slate-700 mb-3">
               Biểu tượng (Icon)
             </label>
             <div className="grid grid-cols-6 sm:grid-cols-8 gap-3 h-48 overflow-y-auto p-1">
@@ -185,18 +185,18 @@ export function CategoryFormModal({ isOpen, onClose, type, editingCategory }: Ca
             )}
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+          <div className="flex justify-end gap-3 pt-5 border-t border-slate-100">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
+              className="px-6 py-3 text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
             >
               Hủy
             </button>
             <button
               type="submit"
               disabled={mutation.isPending}
-              className={`flex items-center px-5 py-2.5 text-sm font-medium text-white rounded-xl transition-colors disabled:opacity-70 bg-primary-600 hover:bg-primary-700`}
+              className={`flex items-center px-6 py-3 text-sm font-bold text-yellow-500 rounded-xl transition-all disabled:opacity-70 bg-slate-900 hover:bg-slate-800 shadow-md shadow-slate-900/10 hover:scale-105 active:scale-95`}
             >
               {mutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
               {isEditing ? 'Lưu thay đổi' : 'Thêm mới'}

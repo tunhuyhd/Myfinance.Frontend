@@ -93,20 +93,20 @@ export function AddFundsModal({ isOpen, onClose, goal }: Props) {
         onClick={onClose}
       ></div>
       
-      <div className="relative bg-white rounded-3xl shadow-xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in-95 duration-200 p-6 text-center">
+      <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in-95 duration-200 p-6 text-center border border-slate-200">
         <div 
-          className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4"
+          className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm"
           style={{ backgroundColor: `${goal.color}15`, color: goal.color }}
         >
           <Sparkles className="w-8 h-8" />
         </div>
         
-        <h2 className="text-xl font-bold text-gray-900 mb-1">Gửi tiền vào quỹ</h2>
-        <p className="text-gray-500 mb-6 font-medium">{goal.name}</p>
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight mb-1">Gửi tiền vào quỹ</h2>
+        <p className="text-slate-500 mb-6 font-medium">{goal.name}</p>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 text-left">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5 text-center">
+            <label className="block text-sm font-bold text-slate-700 mb-1.5 text-center">
               Nhập số tiền muốn gửi
             </label>
             <div className="relative max-w-xs mx-auto">
@@ -114,8 +114,8 @@ export function AddFundsModal({ isOpen, onClose, goal }: Props) {
                 {...register('amount', { valueAsNumber: true })}
                 type="number"
                 placeholder="0"
-                className={`w-full px-4 py-3 rounded-xl border text-center font-bold text-2xl text-primary-600 ${
-                  errors.amount ? 'border-red-300 ring-1 ring-red-500' : 'border-gray-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20'
+                className={`w-full px-4 py-3 rounded-xl border text-center font-bold text-2xl text-slate-900 bg-slate-50 focus:bg-white ${
+                  errors.amount ? 'border-red-300 ring-1 ring-red-500' : 'border-slate-200 focus:border-slate-900 focus:ring-2 focus:ring-slate-900/20'
                 } transition-all`}
               />
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">đ</span>
@@ -123,23 +123,23 @@ export function AddFundsModal({ isOpen, onClose, goal }: Props) {
             {errors.amount && <p className="mt-1 text-sm text-red-500 text-center">{errors.amount.message}</p>}
           </div>
           
-          <div className="bg-gray-50 rounded-xl p-3 flex justify-between items-center text-sm">
-            <span className="text-gray-500">Còn thiếu:</span>
-            <span className="font-semibold text-gray-900">{formatCurrency(goal.remainingAmount)}</span>
+          <div className="bg-slate-50 rounded-xl p-3 flex justify-between items-center text-sm border border-slate-100">
+            <span className="text-slate-500 font-medium">Còn thiếu:</span>
+            <span className="font-bold text-slate-900">{formatCurrency(goal.remainingAmount)}</span>
           </div>
 
           <div className="flex gap-3">
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 py-2.5 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors"
+              className="flex-1 py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition-colors"
             >
               Hủy
             </button>
             <button
               type="submit"
               disabled={mutation.isPending}
-              className="flex-1 py-2.5 px-4 bg-primary-600 hover:bg-primary-700 text-white rounded-xl font-medium shadow-sm flex items-center justify-center transition-colors disabled:opacity-70 gap-2"
+              className="flex-1 py-3 px-4 bg-slate-900 hover:bg-slate-800 text-yellow-500 rounded-xl font-bold shadow-md shadow-slate-900/10 flex items-center justify-center transition-all disabled:opacity-70 gap-2 hover:scale-105 active:scale-95"
             >
               {mutation.isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Plus className="w-5 h-5" />}
               Gửi ngay

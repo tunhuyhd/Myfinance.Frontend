@@ -33,26 +33,26 @@ export function DeleteCategoryDialog({ isOpen, onClose, categoryId, categoryName
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm">
-      <div className="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="bg-white rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 border border-slate-200">
         <div className="p-6 text-center">
-          <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
             <AlertTriangle className="w-8 h-8" />
           </div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Xóa danh mục?</h2>
-          <p className="text-sm text-gray-500 mb-1">
-            Bạn có chắc chắn muốn xóa danh mục <span className="font-semibold text-gray-900">"{categoryName}"</span>?
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight mb-2">Xóa danh mục?</h2>
+          <p className="text-sm font-medium text-slate-500 mb-1">
+            Bạn có chắc chắn muốn xóa danh mục <span className="font-bold text-slate-900">"{categoryName}"</span>?
           </p>
           <p className="text-xs text-orange-600 font-medium">
             (Các giao dịch liên quan sẽ không bị xóa mà chỉ mất đi nhãn danh mục)
           </p>
         </div>
 
-        <div className="flex justify-end gap-3 p-4 bg-gray-50 border-t border-gray-100">
+        <div className="flex justify-end gap-3 p-5 bg-slate-50 border-t border-slate-100">
           <button
             type="button"
             onClick={onClose}
             disabled={mutation.isPending}
-            className="flex-1 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-200 bg-gray-100 rounded-xl transition-colors"
+            className="flex-1 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-200 bg-slate-100 rounded-xl transition-colors shadow-sm"
           >
             Hủy
           </button>
@@ -60,7 +60,7 @@ export function DeleteCategoryDialog({ isOpen, onClose, categoryId, categoryName
             type="button"
             onClick={() => mutation.mutate()}
             disabled={mutation.isPending}
-            className="flex-1 flex items-center justify-center px-4 py-2.5 text-sm font-medium text-white rounded-xl transition-colors disabled:opacity-70 bg-red-600 hover:bg-red-700"
+            className="flex-1 flex items-center justify-center px-4 py-3 text-sm font-bold text-white rounded-xl transition-all disabled:opacity-70 bg-red-500 hover:bg-red-600 shadow-md shadow-red-500/20 hover:scale-105 active:scale-95"
           >
             {mutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
             Xóa ngay

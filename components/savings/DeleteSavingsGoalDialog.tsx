@@ -35,27 +35,27 @@ export function DeleteSavingsGoalDialog({ isOpen, onClose, goal }: Props) {
         onClick={onClose}
       ></div>
       
-      <div className="relative bg-white rounded-3xl shadow-xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in-95 duration-200 p-6 text-center">
-        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 text-red-600">
+      <div className="relative bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden animate-in fade-in zoom-in-95 duration-200 p-6 text-center border border-slate-200">
+        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 text-red-600 shadow-inner">
           <AlertTriangle className="w-8 h-8" />
         </div>
         
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Xóa mục tiêu?</h2>
-        <p className="text-gray-500 mb-6">
-          Bạn có chắc chắn muốn xóa mục tiêu <strong className="text-gray-900">{goal.name}</strong> không? Hành động này không thể hoàn tác.
+        <h2 className="text-xl font-bold text-slate-900 tracking-tight mb-2">Xóa mục tiêu?</h2>
+        <p className="text-slate-500 font-medium mb-6">
+          Bạn có chắc chắn muốn xóa mục tiêu <strong className="text-slate-900 font-bold">{goal.name}</strong> không? Hành động này không thể hoàn tác.
         </p>
 
         <div className="flex gap-3">
           <button
             onClick={onClose}
-            className="flex-1 py-2.5 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors"
+            className="flex-1 py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-bold transition-colors"
           >
             Hủy
           </button>
           <button
             onClick={() => mutation.mutate(goal.id)}
             disabled={mutation.isPending}
-            className="flex-1 py-2.5 px-4 bg-red-600 hover:bg-red-700 text-white rounded-xl font-medium shadow-sm flex items-center justify-center transition-colors disabled:opacity-70"
+            className="flex-1 py-3 px-4 bg-red-500 hover:bg-red-600 text-white rounded-xl font-bold shadow-md shadow-red-500/20 flex items-center justify-center transition-all disabled:opacity-70 hover:scale-105 active:scale-95"
           >
             {mutation.isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Xóa ngay'}
           </button>

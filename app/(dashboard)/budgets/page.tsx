@@ -82,69 +82,69 @@ export default function BudgetsPage() {
       {/* Header & Month Picker */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Ngân sách</h1>
-          <p className="text-sm text-gray-500 mt-1">Lập kế hoạch và kiểm soát chi tiêu</p>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Ngân sách</h1>
+          <p className="text-sm font-medium text-slate-500 mt-1">Lập kế hoạch và kiểm soát chi tiêu</p>
         </div>
         
-        <div className="flex items-center gap-4 bg-white px-2 py-1.5 rounded-xl border border-gray-200 shadow-sm">
-          <button onClick={handlePrevMonth} className="p-1.5 hover:bg-gray-100 rounded-lg text-gray-600">
+        <div className="flex items-center gap-4 bg-white px-2 py-1.5 rounded-xl border border-slate-200 shadow-sm">
+          <button onClick={handlePrevMonth} className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-600 transition-colors">
             <ChevronLeft className="w-5 h-5" />
           </button>
-          <span className="font-semibold text-gray-800 min-w-[100px] text-center">
+          <span className="font-bold text-slate-800 min-w-[100px] text-center">
             Tháng {selectedMonth}/{selectedYear}
           </span>
-          <button onClick={handleNextMonth} className="p-1.5 hover:bg-gray-100 rounded-lg text-gray-600">
+          <button onClick={handleNextMonth} className="p-1.5 hover:bg-slate-100 rounded-lg text-slate-600 transition-colors">
             <ChevronRight className="w-5 h-5" />
           </button>
         </div>
       </div>
 
       {/* Overview Card */}
-      <div className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-gray-100 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-primary-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
+      <div className="bg-slate-900 rounded-3xl p-7 md:p-8 shadow-xl border border-slate-800 relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 group-hover:scale-125 transition-transform duration-700"></div>
         <div className="relative z-10 flex flex-col md:flex-row gap-8 items-center justify-between">
           <div className="flex-1">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center">
-                <Target className="w-6 h-6" />
+            <div className="flex items-center gap-4 mb-6">
+              <div className="w-14 h-14 rounded-2xl bg-slate-800 border border-slate-700 text-yellow-500 flex items-center justify-center shadow-inner">
+                <Target className="w-7 h-7" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-gray-900">Tổng Ngân sách Tháng {selectedMonth}</h2>
-                <p className="text-sm text-gray-500">Giới hạn chi tiêu tổng thể</p>
+                <h2 className="text-xl font-bold text-white tracking-tight">Tổng Ngân sách Tháng {selectedMonth}</h2>
+                <p className="text-sm font-medium text-slate-400">Giới hạn chi tiêu tổng thể</p>
               </div>
             </div>
             
             <div className="flex flex-wrap gap-x-8 gap-y-4">
-              <div>
-                <p className="text-sm font-medium text-gray-500 mb-1">Đã chi tiêu</p>
-                <p className={`text-2xl font-bold ${getTextColor(totalPercentage)}`}>
+              <div className="bg-slate-800/50 backdrop-blur-sm px-5 py-4 rounded-2xl border border-slate-700/50 flex-1 min-w-[140px]">
+                <p className="text-xs font-bold text-slate-400 mb-1 tracking-wider uppercase">Đã chi tiêu</p>
+                <p className={`text-2xl font-bold ${getTextColor(totalPercentage)} tracking-tight`}>
                   {formatCurrency(totalSpent)}
                 </p>
               </div>
-              <div>
-                <p className="text-sm font-medium text-gray-500 mb-1">Tổng giới hạn</p>
-                <p className="text-2xl font-bold text-gray-900">{formatCurrency(totalLimit)}</p>
+              <div className="bg-slate-800/50 backdrop-blur-sm px-5 py-4 rounded-2xl border border-slate-700/50 flex-1 min-w-[140px]">
+                <p className="text-xs font-bold text-slate-400 mb-1 tracking-wider uppercase">Tổng giới hạn</p>
+                <p className="text-2xl font-bold text-white tracking-tight">{formatCurrency(totalLimit)}</p>
               </div>
-              <div>
-                <p className="text-sm font-medium text-gray-500 mb-1">Còn lại</p>
-                <p className="text-2xl font-bold text-gray-600">{formatCurrency(Math.max(totalLimit - totalSpent, 0))}</p>
+              <div className="bg-slate-800/50 backdrop-blur-sm px-5 py-4 rounded-2xl border border-slate-700/50 flex-1 min-w-[140px]">
+                <p className="text-xs font-bold text-slate-400 mb-1 tracking-wider uppercase">Còn lại</p>
+                <p className="text-2xl font-bold text-slate-300 tracking-tight">{formatCurrency(Math.max(totalLimit - totalSpent, 0))}</p>
               </div>
             </div>
           </div>
 
           {/* Circle Progress */}
-          <div className="relative w-32 h-32 flex-shrink-0 flex items-center justify-center">
-            <svg className="w-full h-full -rotate-90" viewBox="0 0 36 36">
+          <div className="relative w-36 h-36 flex-shrink-0 flex items-center justify-center bg-slate-800/50 rounded-full border border-slate-700/50 shadow-inner p-2">
+            <svg className="w-full h-full -rotate-90 drop-shadow-md" viewBox="0 0 36 36">
               <path
-                className="text-gray-100"
-                strokeWidth="3"
+                className="text-slate-800"
+                strokeWidth="3.5"
                 stroke="currentColor"
                 fill="none"
                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
               />
               <path
                 className={`${getProgressColor(totalPercentage).replace('bg-', 'text-')} transition-all duration-1000 ease-out`}
-                strokeWidth="3"
+                strokeWidth="3.5"
                 strokeDasharray={`${Math.min(totalPercentage, 100)}, 100`}
                 strokeLinecap="round"
                 stroke="currentColor"
@@ -153,7 +153,7 @@ export default function BudgetsPage() {
               />
             </svg>
             <div className="absolute flex flex-col items-center justify-center">
-              <span className={`text-xl font-bold ${getTextColor(totalPercentage)}`}>
+              <span className={`text-2xl font-bold ${getTextColor(totalPercentage)} tracking-tighter drop-shadow-sm`}>
                 {Math.round(totalPercentage)}%
               </span>
             </div>
@@ -163,13 +163,13 @@ export default function BudgetsPage() {
 
       {/* Action Bar */}
       <div className="flex justify-between items-center">
-        <h3 className="text-lg font-bold text-gray-900">Chi tiết theo Danh mục</h3>
+        <h3 className="text-xl font-bold text-slate-900 tracking-tight">Chi tiết theo Danh mục</h3>
         <div className="flex gap-3">
           {budgets?.length === 0 && (
             <button 
               onClick={() => copyMutation.mutate()}
               disabled={copyMutation.isPending}
-              className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 transition-colors shadow-sm disabled:opacity-70"
+              className="flex items-center gap-2 px-4 py-2.5 bg-white border border-slate-200 text-slate-700 rounded-xl font-bold hover:bg-slate-50 transition-colors shadow-sm disabled:opacity-70"
             >
               {copyMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Copy className="w-4 h-4" />}
               <span className="hidden sm:inline">Sao chép tháng trước</span>
@@ -180,7 +180,7 @@ export default function BudgetsPage() {
               setEditingBudget(null);
               setIsFormOpen(true);
             }}
-            className="flex items-center gap-2 px-4 py-2.5 bg-primary-600 text-white rounded-xl font-medium hover:bg-primary-700 transition-colors shadow-sm"
+            className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-yellow-500 rounded-xl font-bold hover:bg-slate-800 transition-all shadow-md shadow-slate-900/10 hover:scale-105 active:scale-95"
           >
             <Plus className="w-4 h-4" />
             <span className="hidden sm:inline">Tạo ngân sách</span>
@@ -206,18 +206,18 @@ export default function BudgetsPage() {
 
       {/* Empty State */}
       {!isLoading && !error && budgets?.length === 0 && (
-        <div className="text-center py-16 bg-white rounded-3xl border border-gray-100 border-dashed">
-          <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto text-gray-400 mb-4">
-            <Target className="w-8 h-8" />
+        <div className="text-center py-20 bg-white rounded-3xl border border-slate-200 shadow-sm">
+          <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto text-slate-300 mb-5 shadow-inner">
+            <Target className="w-10 h-10" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Chưa có ngân sách nào</h3>
-          <p className="text-sm text-gray-500 mb-6 max-w-sm mx-auto">Tạo ngân sách cho các danh mục chi tiêu để dễ dàng kiểm soát tài chính của bạn trong tháng này.</p>
+          <h3 className="text-xl font-bold text-slate-900 mb-2 tracking-tight">Chưa có ngân sách nào</h3>
+          <p className="text-sm font-medium text-slate-500 mb-8 max-w-sm mx-auto">Tạo ngân sách cho các danh mục chi tiêu để dễ dàng kiểm soát tài chính của bạn trong tháng này.</p>
           <button 
             onClick={() => {
               setEditingBudget(null);
               setIsFormOpen(true);
             }}
-            className="text-primary-600 font-medium text-sm hover:text-primary-700 bg-primary-50 hover:bg-primary-100 px-6 py-2.5 rounded-xl transition-colors"
+            className="text-slate-900 font-bold text-sm bg-yellow-500 hover:bg-yellow-400 px-6 py-3 rounded-xl shadow-sm transition-all hover:scale-105 active:scale-95"
           >
             Tạo ngân sách đầu tiên
           </button>
@@ -231,19 +231,19 @@ export default function BudgetsPage() {
           const isOverLimit = budget.percentage > 100;
           
           return (
-            <div key={budget.id} className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition-all relative">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
+            <div key={budget.id} className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-all relative group">
+              <div className="flex items-center justify-between mb-5">
+                <div className="flex items-center gap-4">
                   <div 
-                    className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm"
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-sm border border-slate-100 group-hover:scale-105 transition-transform"
                     style={{ backgroundColor: `${budget.category.color}15`, color: budget.category.color }}
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="w-6 h-6" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-gray-900">{budget.category.name}</h4>
-                    <p className="text-xs text-gray-500 font-medium mt-0.5">
-                      Đã dùng {formatCurrency(budget.spentAmount)} / {formatCurrency(budget.limitAmount)}
+                    <h4 className="font-bold text-slate-900 text-lg tracking-tight">{budget.category.name}</h4>
+                    <p className="text-xs text-slate-500 font-medium mt-0.5">
+                      Đã dùng <span className="text-slate-700">{formatCurrency(budget.spentAmount)}</span> / {formatCurrency(budget.limitAmount)}
                     </p>
                   </div>
                 </div>
@@ -251,7 +251,7 @@ export default function BudgetsPage() {
                 <div className="relative">
                   <button 
                     onClick={() => setDropdownOpen(dropdownOpen === budget.id ? null : budget.id)}
-                    className="p-2 hover:bg-gray-50 rounded-lg text-gray-400 hover:text-gray-600 transition-colors"
+                    className="p-2 hover:bg-slate-100 rounded-xl text-slate-400 hover:text-slate-700 transition-colors"
                   >
                     <MoreHorizontal className="w-5 h-5" />
                   </button>
@@ -259,16 +259,16 @@ export default function BudgetsPage() {
                   {dropdownOpen === budget.id && (
                     <>
                       <div className="fixed inset-0 z-10" onClick={() => setDropdownOpen(null)}></div>
-                      <div className="absolute right-0 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-20 animate-in fade-in slide-in-from-top-2">
+                      <div className="absolute right-0 mt-2 w-36 bg-white rounded-2xl shadow-xl border border-slate-100 py-1.5 z-20 animate-in fade-in zoom-in-95">
                         <button 
                           onClick={() => {
                             setEditingBudget(budget);
                             setIsFormOpen(true);
                             setDropdownOpen(null);
                           }}
-                          className="w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                          className="w-full px-4 py-2.5 text-sm font-medium text-left text-slate-700 hover:bg-slate-50 flex items-center gap-3"
                         >
-                          <Pencil className="w-4 h-4" /> Sửa
+                          <Pencil className="w-4 h-4 text-slate-400" /> Sửa
                         </button>
                         <button 
                           onClick={() => {
@@ -276,7 +276,7 @@ export default function BudgetsPage() {
                             setIsDeleteDialogOpen(true);
                             setDropdownOpen(null);
                           }}
-                          className="w-full px-4 py-2 text-sm text-left text-red-600 hover:bg-red-50 flex items-center gap-2"
+                          className="w-full px-4 py-2.5 text-sm font-medium text-left text-red-600 hover:bg-red-50 flex items-center gap-3"
                         >
                           <Trash2 className="w-4 h-4" /> Xóa
                         </button>
@@ -288,17 +288,17 @@ export default function BudgetsPage() {
 
               {/* Progress Bar */}
               <div>
-                <div className="flex justify-between text-xs font-semibold mb-2">
+                <div className="flex justify-between text-xs font-bold mb-2">
                   <span className={getTextColor(budget.percentage)}>
                     {Math.round(budget.percentage)}%
                   </span>
-                  <span className={isOverLimit ? 'text-red-500' : 'text-gray-500'}>
+                  <span className={isOverLimit ? 'text-red-500' : 'text-slate-500'}>
                     {isOverLimit ? `Vượt quá ${formatCurrency(budget.spentAmount - budget.limitAmount)}` : `Còn lại ${formatCurrency(budget.remainingAmount)}`}
                   </span>
                 </div>
-                <div className="w-full bg-gray-100 rounded-full h-2.5 overflow-hidden">
+                <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden shadow-inner">
                   <div 
-                    className={`h-2.5 rounded-full transition-all duration-1000 ease-out ${getProgressColor(budget.percentage)}`}
+                    className={`h-3 rounded-full transition-all duration-1000 ease-out ${getProgressColor(budget.percentage)}`}
                     style={{ width: `${Math.min(budget.percentage, 100)}%` }}
                   ></div>
                 </div>

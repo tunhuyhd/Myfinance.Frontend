@@ -149,12 +149,12 @@ export function CreateTransactionModal({ isOpen, onClose }: CreateTransactionMod
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/50 backdrop-blur-sm">
-      <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
-        <div className="flex items-center justify-between p-6 border-b border-gray-100">
-          <h2 className="text-xl font-semibold text-gray-900">Thêm Giao dịch</h2>
+      <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh] border border-slate-200">
+        <div className="flex items-center justify-between p-6 border-b border-slate-100">
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">Thêm Giao dịch</h2>
           <button
             onClick={onClose}
-            className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+            className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -162,14 +162,14 @@ export function CreateTransactionModal({ isOpen, onClose }: CreateTransactionMod
 
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
           {/* Transaction Type Toggle */}
-          <div className="flex p-1 bg-gray-100 rounded-xl">
+          <div className="flex p-1.5 bg-slate-100 rounded-xl shadow-inner">
             <button
               type="button"
               onClick={() => setValue('type', 2)} // Expense
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium transition-all ${
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-bold transition-all ${
                 selectedType === 2
                   ? 'bg-white text-red-600 shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700'
+                  : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
               }`}
             >
               <ArrowDownCircle className="w-4 h-4" />
@@ -178,10 +178,10 @@ export function CreateTransactionModal({ isOpen, onClose }: CreateTransactionMod
             <button
               type="button"
               onClick={() => setValue('type', 1)} // Income
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium transition-all ${
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-bold transition-all ${
                 selectedType === 1
                   ? 'bg-white text-green-600 shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700'
+                  : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
               }`}
             >
               <ArrowUpCircle className="w-4 h-4" />
@@ -190,10 +190,10 @@ export function CreateTransactionModal({ isOpen, onClose }: CreateTransactionMod
             <button
               type="button"
               onClick={() => setValue('type', 3)} // Transfer
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-medium transition-all ${
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-bold transition-all ${
                 selectedType === 3
                   ? 'bg-white text-blue-600 shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700'
+                  : 'text-slate-500 hover:text-slate-700 hover:bg-slate-200/50'
               }`}
             >
               <ArrowRightLeft className="w-4 h-4" />
@@ -203,7 +203,7 @@ export function CreateTransactionModal({ isOpen, onClose }: CreateTransactionMod
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label className="block text-sm font-bold text-slate-700 mb-1.5">
                 Số tiền
               </label>
               <div className="relative">
@@ -211,45 +211,45 @@ export function CreateTransactionModal({ isOpen, onClose }: CreateTransactionMod
                   {...register('amount', { valueAsNumber: true })}
                   type="number"
                   placeholder="0"
-                  className={`w-full px-4 py-2.5 rounded-xl border font-semibold text-lg ${
+                  className={`w-full px-4 py-3 rounded-xl border font-bold text-lg bg-slate-50 focus:bg-white ${
                     selectedType === 1 ? 'text-green-600' : selectedType === 3 ? 'text-blue-600' : 'text-red-600'
                   } ${
-                    errors.amount ? 'border-red-300 focus:ring-red-500' : 'border-gray-200 focus:border-primary-500 focus:ring-primary-500'
+                    errors.amount ? 'border-red-300 focus:ring-red-500' : 'border-slate-200 focus:border-slate-900 focus:ring-slate-900'
                   } focus:outline-none focus:ring-2 focus:ring-opacity-20 transition-all`}
                 />
-                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">đ</span>
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 font-medium">đ</span>
               </div>
               {errors.amount && (
-                <p className="mt-1 text-sm text-red-500">{errors.amount.message}</p>
+                <p className="mt-1 text-sm text-red-500 font-medium">{errors.amount.message}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label className="block text-sm font-bold text-slate-700 mb-1.5">
                 Ngày giao dịch
               </label>
               <input
                 {...register('transactionDate')}
                 type="date"
-                className={`w-full px-4 py-2.5 rounded-xl border ${
-                  errors.transactionDate ? 'border-red-300 focus:ring-red-500' : 'border-gray-200 focus:border-primary-500 focus:ring-primary-500'
+                className={`w-full px-4 py-3 rounded-xl border bg-slate-50 focus:bg-white font-medium ${
+                  errors.transactionDate ? 'border-red-300 focus:ring-red-500' : 'border-slate-200 focus:border-slate-900 focus:ring-slate-900'
                 } focus:outline-none focus:ring-2 focus:ring-opacity-20 transition-all`}
               />
               {errors.transactionDate && (
-                <p className="mt-1 text-sm text-red-500">{errors.transactionDate.message}</p>
+                <p className="mt-1 text-sm text-red-500 font-medium">{errors.transactionDate.message}</p>
               )}
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-bold text-slate-700 mb-1.5">
               {selectedType === 3 ? 'Từ Ví (Ví nguồn)' : 'Từ Ví / Nguồn tiền'}
             </label>
             <select
               {...register('accountId')}
-              className={`w-full px-4 py-2.5 rounded-xl border ${
-                errors.accountId ? 'border-red-300 focus:ring-red-500' : 'border-gray-200 focus:border-primary-500 focus:ring-primary-500'
-              } focus:outline-none focus:ring-2 focus:ring-opacity-20 transition-all bg-white`}
+              className={`w-full px-4 py-3 rounded-xl border bg-slate-50 focus:bg-white font-medium ${
+                errors.accountId ? 'border-red-300 focus:ring-red-500' : 'border-slate-200 focus:border-slate-900 focus:ring-slate-900'
+              } focus:outline-none focus:ring-2 focus:ring-opacity-20 transition-all`}
             >
               <option value="">-- Chọn ví giao dịch --</option>
               {accounts?.map((account) => (
@@ -259,7 +259,7 @@ export function CreateTransactionModal({ isOpen, onClose }: CreateTransactionMod
               ))}
             </select>
             {errors.accountId && (
-              <p className="mt-1 text-sm text-red-500">{errors.accountId.message}</p>
+              <p className="mt-1 text-sm text-red-500 font-medium">{errors.accountId.message}</p>
             )}
           </div>
 
@@ -289,21 +289,21 @@ export function CreateTransactionModal({ isOpen, onClose }: CreateTransactionMod
 
           {selectedType !== 3 && (
             <div className="relative" ref={dropdownRef}>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+              <label className="block text-sm font-bold text-slate-700 mb-1.5">
                 Danh mục
               </label>
               
               <button
                 type="button"
                 onClick={() => setIsCategoryOpen(!isCategoryOpen)}
-                className={`w-full px-4 py-2.5 rounded-xl border flex items-center justify-between bg-white transition-all ${
-                  errors.categoryId ? 'border-red-300 ring-1 ring-red-500' : 'border-gray-200 hover:border-gray-300'
-                } ${isCategoryOpen ? 'border-primary-500 ring-2 ring-primary-500/20' : ''}`}
+                className={`w-full px-4 py-3 rounded-xl border flex items-center justify-between bg-slate-50 transition-all font-medium ${
+                  errors.categoryId ? 'border-red-300 ring-1 ring-red-500' : 'border-slate-200 hover:border-slate-300'
+                } ${isCategoryOpen ? 'border-slate-900 ring-2 ring-slate-900/20 bg-white' : ''}`}
               >
                 {selectedCategoryObj ? (
                   <div className="flex items-center gap-3">
                     <div 
-                      className="w-6 h-6 rounded-md flex items-center justify-center"
+                      className="w-6 h-6 rounded-md flex items-center justify-center shadow-sm"
                       style={{ backgroundColor: `${selectedCategoryObj.color}15`, color: selectedCategoryObj.color }}
                     >
                       {(() => {
@@ -311,16 +311,16 @@ export function CreateTransactionModal({ isOpen, onClose }: CreateTransactionMod
                         return <Icon className="w-4 h-4" />;
                       })()}
                     </div>
-                    <span className="font-medium text-gray-900">{selectedCategoryObj.name}</span>
+                    <span className="font-bold text-slate-900">{selectedCategoryObj.name}</span>
                   </div>
                 ) : (
-                  <span className="text-gray-500">-- Chọn danh mục --</span>
+                  <span className="text-slate-400">-- Chọn danh mục --</span>
                 )}
-                <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isCategoryOpen ? 'rotate-180' : ''}`} />
+                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${isCategoryOpen ? 'rotate-180' : ''}`} />
               </button>
 
               {isCategoryOpen && (
-                <div className="absolute z-10 w-full mt-2 bg-white border border-gray-100 rounded-xl shadow-lg max-h-60 overflow-auto py-1">
+                <div className="absolute z-10 w-full mt-2 bg-white border border-slate-100 rounded-xl shadow-xl max-h-60 overflow-auto py-1">
                   {categories?.map((cat) => {
                     const Icon = getCategoryIcon(cat.icon);
                     const isSelected = selectedCategoryId === cat.id;
@@ -333,27 +333,27 @@ export function CreateTransactionModal({ isOpen, onClose }: CreateTransactionMod
                           setValue('categoryId', cat.id, { shouldValidate: true });
                           setIsCategoryOpen(false);
                         }}
-                        className={`w-full flex items-center justify-between px-4 py-2.5 hover:bg-gray-50 transition-colors ${
-                          isSelected ? 'bg-primary-50/50' : ''
+                        className={`w-full flex items-center justify-between px-4 py-2.5 hover:bg-slate-50 transition-colors ${
+                          isSelected ? 'bg-slate-50' : ''
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div 
-                            className="w-8 h-8 rounded-lg flex items-center justify-center"
+                            className="w-8 h-8 rounded-lg flex items-center justify-center shadow-sm"
                             style={{ backgroundColor: `${cat.color}15`, color: cat.color }}
                           >
                             <Icon className="w-4 h-4" />
                           </div>
-                          <span className={`text-sm ${isSelected ? 'font-semibold text-gray-900' : 'font-medium text-gray-700'}`}>
+                          <span className={`text-sm ${isSelected ? 'font-bold text-slate-900' : 'font-medium text-slate-600'}`}>
                             {cat.name}
                           </span>
                         </div>
-                        {isSelected && <Check className="w-4 h-4 text-primary-600" />}
+                        {isSelected && <Check className="w-4 h-4 text-slate-900" />}
                       </button>
                     );
                   })}
                   {categories?.length === 0 && (
-                    <div className="px-4 py-3 text-sm text-gray-500 text-center">
+                    <div className="px-4 py-3 text-sm text-slate-500 font-medium text-center">
                       Chưa có danh mục nào
                     </div>
                   )}
@@ -361,42 +361,40 @@ export function CreateTransactionModal({ isOpen, onClose }: CreateTransactionMod
               )}
               
               {errors.categoryId && (
-                <p className="mt-1 text-sm text-red-500">{errors.categoryId.message}</p>
+                <p className="mt-1 text-sm text-red-500 font-medium">{errors.categoryId.message}</p>
               )}
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1.5">
+            <label className="block text-sm font-bold text-slate-700 mb-1.5">
               Mô tả / Diễn giải
             </label>
             <input
               {...register('description')}
               type="text"
               placeholder="VD: Ăn trưa, Nhận lương..."
-              className={`w-full px-4 py-2.5 rounded-xl border ${
-                errors.description ? 'border-red-300 focus:ring-red-500' : 'border-gray-200 focus:border-primary-500 focus:ring-primary-500'
+              className={`w-full px-4 py-3 rounded-xl border bg-slate-50 focus:bg-white font-medium ${
+                errors.description ? 'border-red-300 focus:ring-red-500' : 'border-slate-200 focus:border-slate-900 focus:ring-slate-900'
               } focus:outline-none focus:ring-2 focus:ring-opacity-20 transition-all`}
             />
             {errors.description && (
-              <p className="mt-1 text-sm text-red-500">{errors.description.message}</p>
+              <p className="mt-1 text-sm text-red-500 font-medium">{errors.description.message}</p>
             )}
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
+          <div className="flex justify-end gap-3 pt-5 border-t border-slate-100">
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-xl transition-colors"
+              className="px-6 py-3 text-sm font-bold text-slate-700 hover:bg-slate-200 bg-slate-100 rounded-xl transition-colors"
             >
               Hủy
             </button>
             <button
               type="submit"
               disabled={mutation.isPending}
-              className={`flex items-center px-5 py-2.5 text-sm font-medium text-white rounded-xl transition-colors disabled:opacity-70 ${
-                selectedType === 1 ? 'bg-green-600 hover:bg-green-700' : selectedType === 3 ? 'bg-blue-600 hover:bg-blue-700' : 'bg-primary-600 hover:bg-primary-700'
-              }`}
+              className={`flex items-center px-6 py-3 text-sm font-bold text-yellow-500 bg-slate-900 hover:bg-slate-800 rounded-xl transition-all shadow-md shadow-slate-900/10 hover:scale-105 active:scale-95 disabled:opacity-70`}
             >
               {mutation.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
               {selectedType === 1 ? 'Lưu khoản thu' : selectedType === 3 ? 'Lưu chuyển khoản' : 'Lưu khoản chi'}

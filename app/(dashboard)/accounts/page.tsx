@@ -53,12 +53,12 @@ export default function AccountsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Quản lý Tài khoản</h1>
-          <p className="text-sm text-gray-500 mt-1">Danh sách các ví và tài khoản ngân hàng của bạn</p>
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Quản lý Tài khoản</h1>
+          <p className="text-sm font-medium text-slate-500 mt-1">Danh sách các ví và tài khoản ngân hàng của bạn</p>
         </div>
         <button 
           onClick={() => setIsCreateModalOpen(true)}
-          className="bg-primary-600 text-white px-4 py-2.5 rounded-xl text-sm font-medium hover:bg-primary-700 shadow-sm transition-colors flex items-center gap-2"
+          className="bg-slate-900 text-yellow-500 px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-slate-800 shadow-md shadow-slate-900/10 transition-all flex items-center gap-2 border border-slate-700 hover:scale-105 active:scale-95"
         >
           <Plus className="w-4 h-4" />
           <span>Thêm tài khoản</span>
@@ -66,14 +66,14 @@ export default function AccountsPage() {
       </div>
 
       {/* Overview Card */}
-      <div className="glass rounded-2xl p-6 shadow-sm border border-gray-100 flex items-center justify-between relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
+      <div className="bg-gradient-to-r from-slate-100 to-white rounded-3xl p-7 shadow-sm border border-slate-200 flex items-center justify-between relative overflow-hidden group">
+        <div className="absolute right-0 top-0 w-48 h-48 bg-yellow-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4 group-hover:scale-150 transition-transform duration-700"></div>
         <div className="relative z-10">
-          <p className="text-sm font-medium text-gray-500 mb-1">Tổng tài sản</p>
-          <h2 className="text-3xl font-bold text-gray-900">{formatCurrency(totalBalance)}</h2>
+          <p className="text-sm font-bold text-slate-500 mb-1">Tổng tài sản</p>
+          <h2 className="text-4xl font-bold text-slate-900 tracking-tight">{formatCurrency(totalBalance)}</h2>
         </div>
-        <div className="relative z-10 w-12 h-12 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center">
-          <Landmark className="w-6 h-6" />
+        <div className="relative z-10 w-14 h-14 rounded-2xl bg-slate-900 text-yellow-500 flex items-center justify-center shadow-lg shadow-slate-900/10">
+          <Landmark className="w-7 h-7" />
         </div>
       </div>
 
@@ -95,15 +95,15 @@ export default function AccountsPage() {
 
       {/* Account List */}
       {!isLoading && !error && accounts?.length === 0 && (
-        <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 border-dashed">
-          <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto text-gray-400 mb-4">
-            <Wallet className="w-8 h-8" />
+        <div className="text-center py-20 bg-white rounded-3xl border border-slate-200 shadow-sm">
+          <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto text-slate-300 mb-5 shadow-inner">
+            <Wallet className="w-10 h-10" />
           </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">Chưa có tài khoản nào</h3>
-          <p className="text-sm text-gray-500 mb-6 max-w-sm mx-auto">Hãy tạo tài khoản đầu tiên để bắt đầu ghi chép các giao dịch của bạn.</p>
+          <h3 className="text-xl font-bold text-slate-900 mb-2 tracking-tight">Chưa có tài khoản nào</h3>
+          <p className="text-sm font-medium text-slate-500 mb-8 max-w-sm mx-auto">Hãy tạo tài khoản đầu tiên để bắt đầu ghi chép các giao dịch của bạn.</p>
           <button 
             onClick={() => setIsCreateModalOpen(true)}
-            className="text-primary-600 font-medium text-sm hover:text-primary-700 bg-primary-50 px-4 py-2 rounded-lg"
+            className="text-slate-900 font-bold text-sm bg-yellow-500 hover:bg-yellow-400 px-6 py-3 rounded-xl shadow-sm transition-all hover:scale-105 active:scale-95"
           >
             Tạo tài khoản ngay
           </button>
@@ -112,38 +112,45 @@ export default function AccountsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" ref={dropdownRef}>
         {accounts?.map((account) => (
-          <div key={account.id} className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow relative group">
+          <div 
+            key={account.id} 
+            className="rounded-3xl p-7 shadow-lg relative group overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1"
+            style={{ 
+              background: account.color ? `linear-gradient(135deg, ${account.color}e6, ${account.color}b3)` : 'linear-gradient(135deg, #0f172a, #1e293b)' 
+            }}
+          >
+            {/* Background pattern mimicking credit card */}
+            <div className="absolute -right-6 -top-6 w-32 h-32 border-4 border-white/10 rounded-full"></div>
+            <div className="absolute right-12 -top-12 w-24 h-24 border-4 border-white/10 rounded-full"></div>
+            
             {account.isDefault && (
-              <div className="absolute top-0 right-0 bg-primary-100 text-primary-700 text-[10px] font-bold px-2 py-1 rounded-bl-lg rounded-tr-xl">
+              <div className="absolute top-0 right-0 bg-yellow-500 text-slate-900 text-[10px] font-bold px-3 py-1 rounded-bl-xl rounded-tr-3xl shadow-sm">
                 MẶC ĐỊNH
               </div>
             )}
             
-            <div className="flex justify-between items-start mb-6">
-              <div 
-                className="w-12 h-12 rounded-xl flex items-center justify-center text-white shadow-sm"
-                style={{ backgroundColor: account.color || '#3b82f6' }}
-              >
+            <div className="flex justify-between items-start mb-8 relative z-10">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center text-white bg-white/20 backdrop-blur-md shadow-inner border border-white/20">
                 {getAccountIcon(account.accountType)}
               </div>
               <div className="relative">
                 <button 
                   onClick={() => setDropdownOpen(dropdownOpen === account.id ? null : account.id)}
-                  className="text-gray-400 hover:text-gray-600 p-1 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="text-white/80 hover:text-white p-2 rounded-xl hover:bg-white/20 backdrop-blur-md transition-colors"
                 >
-                  <MoreHorizontal className="w-5 h-5" />
+                  <MoreHorizontal className="w-6 h-6" />
                 </button>
                 
                 {dropdownOpen === account.id && (
-                  <div className="absolute right-0 mt-1 w-36 bg-white rounded-xl shadow-lg border border-gray-100 py-1 z-20 animate-in fade-in slide-in-from-top-2">
+                  <div className="absolute right-0 mt-2 w-40 bg-white rounded-2xl shadow-xl border border-slate-100 py-1.5 z-20 animate-in fade-in zoom-in-95">
                     <button 
                       onClick={() => {
                         setEditingAccount(account);
                         setDropdownOpen(null);
                       }}
-                      className="w-full px-4 py-2 text-sm text-left text-gray-700 hover:bg-gray-50 flex items-center gap-2 transition-colors"
+                      className="w-full px-4 py-2.5 text-sm font-medium text-left text-slate-700 hover:bg-slate-50 flex items-center gap-3 transition-colors"
                     >
-                      <Pencil className="w-4 h-4" />
+                      <Pencil className="w-4 h-4 text-slate-400" />
                       Sửa ví
                     </button>
                     <button 
@@ -151,7 +158,7 @@ export default function AccountsPage() {
                         setDeletingAccount(account);
                         setDropdownOpen(null);
                       }}
-                      className="w-full px-4 py-2 text-sm text-left text-red-600 hover:bg-red-50 flex items-center gap-2 transition-colors"
+                      className="w-full px-4 py-2.5 text-sm font-medium text-left text-red-600 hover:bg-red-50 flex items-center gap-3 transition-colors"
                     >
                       <Trash2 className="w-4 h-4" />
                       Xóa ví
@@ -161,9 +168,9 @@ export default function AccountsPage() {
               </div>
             </div>
             
-            <div>
-              <p className="text-sm font-medium text-gray-500 mb-1">{account.name}</p>
-              <h3 className="text-2xl font-bold text-gray-900">{formatCurrency(account.balance, account.currency)}</h3>
+            <div className="relative z-10">
+              <p className="text-sm font-medium text-white/80 mb-1 tracking-wide">{account.name}</p>
+              <h3 className="text-3xl font-bold text-white tracking-tight">{formatCurrency(account.balance, account.currency)}</h3>
             </div>
           </div>
         ))}
