@@ -5,6 +5,7 @@ import { Bell, Search, LogOut, User as UserIcon, Menu, X, LayoutDashboard, Walle
 import { useRouter, usePathname } from 'next/navigation';
 import { useState } from 'react';
 import Link from 'next/link';
+import { API_BASE_URL } from '@/services/api';
 
 const navigation = [
   { name: 'Tổng quan', href: '/', icon: LayoutDashboard },
@@ -66,8 +67,12 @@ export function Topbar() {
             onClick={() => setShowDropdown(!showDropdown)}
             className="flex items-center space-x-3 p-1 pr-2 rounded-full hover:bg-white transition-all border border-transparent hover:border-slate-200 hover:shadow-sm"
           >
-            <div className="w-9 h-9 rounded-full bg-slate-900 text-yellow-500 flex items-center justify-center font-bold text-sm shadow-inner">
-              {user?.fullName?.charAt(0).toUpperCase() || 'U'}
+            <div className="w-9 h-9 rounded-full bg-slate-900 text-yellow-500 flex items-center justify-center font-bold text-sm shadow-inner overflow-hidden border border-slate-200">
+              {user?.avatarUrl ? (
+                <img src={`${API_BASE_URL}${user.avatarUrl}`} alt={user.fullName} className="w-full h-full object-cover" />
+              ) : (
+                user?.fullName?.charAt(0).toUpperCase() || 'U'
+              )}
             </div>
             <div className="hidden md:block text-left">
               <p className="text-sm font-bold text-slate-900 leading-tight">{user?.fullName || 'Người dùng'}</p>

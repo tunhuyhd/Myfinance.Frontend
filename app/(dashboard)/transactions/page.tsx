@@ -39,7 +39,7 @@ export default function TransactionsPage() {
       <div className="flex bg-slate-100 p-1.5 rounded-xl w-full sm:w-max shadow-inner">
         <button
           onClick={() => setFilterType(undefined)}
-          className={`flex-1 sm:px-6 py-2 rounded-lg text-sm transition-all ${
+          className={`flex-1 sm:px-6 py-2 rounded-lg text-sm whitespace-nowrap transition-all ${
             filterType === undefined ? 'bg-white text-slate-900 shadow-sm font-bold' : 'text-slate-500 font-medium hover:text-slate-700 hover:bg-slate-200/50'
           }`}
         >
@@ -47,7 +47,7 @@ export default function TransactionsPage() {
         </button>
         <button
           onClick={() => setFilterType(1)}
-          className={`flex-1 sm:px-6 py-2 rounded-lg text-sm transition-all ${
+          className={`flex-1 sm:px-6 py-2 rounded-lg text-sm whitespace-nowrap transition-all ${
             filterType === 1 ? 'bg-white text-green-600 shadow-sm font-bold' : 'text-slate-500 font-medium hover:text-slate-700 hover:bg-slate-200/50'
           }`}
         >
@@ -55,7 +55,7 @@ export default function TransactionsPage() {
         </button>
         <button
           onClick={() => setFilterType(2)}
-          className={`flex-1 sm:px-6 py-2 rounded-lg text-sm transition-all ${
+          className={`flex-1 sm:px-6 py-2 rounded-lg text-sm whitespace-nowrap transition-all ${
             filterType === 2 ? 'bg-white text-red-600 shadow-sm font-bold' : 'text-slate-500 font-medium hover:text-slate-700 hover:bg-slate-200/50'
           }`}
         >
@@ -63,7 +63,7 @@ export default function TransactionsPage() {
         </button>
         <button
           onClick={() => setFilterType(3)}
-          className={`flex-1 sm:px-6 py-2 rounded-lg text-sm transition-all ${
+          className={`flex-1 sm:px-6 py-2 rounded-lg text-sm whitespace-nowrap transition-all ${
             filterType === 3 ? 'bg-white text-blue-600 shadow-sm font-bold' : 'text-slate-500 font-medium hover:text-slate-700 hover:bg-slate-200/50'
           }`}
         >
