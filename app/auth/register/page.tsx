@@ -47,7 +47,7 @@ export default function RegisterPage() {
       const { token, refreshToken, username, userId } = response.data;
       
       setAuth(
-        { id: userId, username, email: data.email, fullName: data.fullName },
+        { id: userId, username, email: data.email, fullName: data.fullName, isAdmin: false },
         token,
         refreshToken
       );

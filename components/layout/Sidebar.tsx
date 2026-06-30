@@ -9,8 +9,10 @@ import {
   Tags, 
   PieChart, 
   Target, 
-  LineChart 
+  LineChart,
+  Users
 } from 'lucide-react';
+import { useAuthStore } from '@/store/auth.store';
 
 const navigation = [
   { name: 'Tổng quan', href: '/', icon: LayoutDashboard },
@@ -24,6 +26,8 @@ const navigation = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { user } = useAuthStore();
+  const isAdmin = user?.isAdmin === true;
 
   return (
     <div className="flex flex-col w-64 bg-slate-900 border-r border-slate-800 shadow-xl h-full hidden md:flex z-10">
@@ -56,6 +60,25 @@ export function Sidebar() {
             </Link>
           );
         })}
+        
+        {isAdmin && (
+          <>
+            <div className="pt-4 pb-2 px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+              Quản trị
+            </div>
+            <Link
+              href="/admin/users"
+              className={`flex items-center space-x-3 px-3 py-2.5 rounded-xl transition-all duration-300 group ${
+                pathname === '/admin/users' 
+                  ? 'bg-blue-900/50 text-white font-medium border border-blue-800/30 shadow-inner' 
+                  : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'
+              }`}
+            >
+              <Users className={`w-5 h-5 transition-colors ${pathname === '/admin/users' ? 'text-yellow-500' : 'text-slate-500 group-hover:text-slate-300'}`} />
+              <span>Người dùng</span>
+            </Link>
+          </>
+        )}
       </nav>
       
       <div className="p-4 border-t border-slate-800/50">

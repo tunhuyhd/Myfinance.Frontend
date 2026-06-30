@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { api } from '@/services/api';
+import { authService } from '@/services/auth.service';
 import { useAuthStore } from '@/store/auth.store';
 import { Loader2 } from 'lucide-react';
 
@@ -45,10 +46,18 @@ export default function LoginPage() {
       const { token, refreshToken, username, userId } = response.data;
       
       setAuth(
-        { id: userId, username, email: '', fullName: username },
+        { id: userId, username, email: '', fullName: username, isAdmin: false },
         token,
         refreshToken
       );
+      
+      // Fetch full profile to get isAdmin flag
+      try {
+        const profile = await authService.getProfile();
+        setAuth(profile, token, refreshToken);
+      } catch (err) {
+        console.error('Failed to fetch full profile', err);
+      }
       
       toast.success('Đăng nhập thành công!');
       router.push('/');
