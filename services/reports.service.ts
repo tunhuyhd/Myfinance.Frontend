@@ -46,4 +46,9 @@ export const reportsService = {
     const response = await api.get('/reports/monthly');
     return response.data;
   },
+
+  getCategoryExpenses: async (month: number, year: number): Promise<CategorySummaryDto[]> => {
+    const response = await api.get('/reports/category-expenses', { params: { month, year } });
+    return response.data;
+  },
 };

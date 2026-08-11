@@ -10,16 +10,35 @@ import {
   CartesianGrid, 
   Tooltip, 
   Legend, 
-  ResponsiveContainer,
-  Cell
+  ResponsiveContainer
 } from 'recharts';
 import { Loader2, TrendingUp, TrendingDown, LayoutDashboard } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
+import { useState } from 'react';
 
 export default function ReportsPage() {
+  const [selectedPeriod, setSelectedPeriod] = useState<string | null>(null);
+
   const { data: monthlyReports, isLoading } = useQuery({
     queryKey: ['reports', 'monthly'],
     queryFn: reportsService.getMonthlyReport,
+  });
+
+  const availableReports = [...(monthlyReports || [])].sort(
+    (a, b) => b.year - a.year || b.month - a.month
+  );
+  const activePeriod = selectedPeriod || (availableReports[0]
+    ? `${availableReports[0].year}-${availableReports[0].month}`
+    : null);
+  const [selectedYear, selectedMonth] = activePeriod?.split('-').map(Number) || [];
+  const selectedReport = monthlyReports?.find(
+    report => report.month === selectedMonth && report.year === selectedYear
+  );
+
+  const { data: categoryExpenses, isLoading: isCategoryLoading } = useQuery({
+    queryKey: ['reports', 'category-expenses', selectedMonth, selectedYear],
+    queryFn: () => reportsService.getCategoryExpenses(selectedMonth, selectedYear),
+    enabled: Boolean(selectedMonth && selectedYear),
   });
 
   const chartData = monthlyReports?.map(report => ({
@@ -29,7 +48,7 @@ export default function ReportsPage() {
     'Thực nhận': report.net
   })).reverse() || []; // Reverse if we want chronological order depending on API
 
-  if (isLoading) {
+  if (isLoading || (activePeriod && isCategoryLoading)) {
     return (
       <div className="flex h-[50vh] items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-slate-900" />
@@ -37,18 +56,35 @@ export default function ReportsPage() {
     );
   }
 
-  // Calculate totals
-  const totalIncome = monthlyReports?.reduce((sum, item) => sum + item.income, 0) || 0;
-  const totalExpense = monthlyReports?.reduce((sum, item) => sum + item.expense, 0) || 0;
+  // Calculate totals for the selected month
+  const totalIncome = selectedReport?.income || 0;
+  const totalExpense = selectedReport?.expense || 0;
   const totalNet = totalIncome - totalExpense;
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-end">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Báo cáo tài chính</h1>
           <p className="text-sm font-medium text-slate-500 mt-1">Phân tích dòng tiền và xu hướng chi tiêu</p>
         </div>
+        {availableReports.length > 0 && (
+          <label className="flex flex-col gap-1.5 text-sm font-semibold text-slate-700">
+            Tháng báo cáo
+            <select
+              value={activePeriod || ''}
+              onChange={(event) => setSelectedPeriod(event.target.value)}
+              className="min-w-44 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-900 shadow-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20"
+              aria-label="Chọn tháng báo cáo"
+            >
+              {availableReports.map(report => (
+                <option key={`${report.year}-${report.month}`} value={`${report.year}-${report.month}`}>
+                  Tháng {report.month}/{report.year}
+                </option>
+              ))}
+            </select>
+          </label>
+        )}
       </div>
 
       {/* Overview Cards */}
@@ -56,7 +92,7 @@ export default function ReportsPage() {
         <div className="bg-white rounded-3xl p-7 border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
           <div className="absolute right-0 top-0 w-32 h-32 bg-green-50 rounded-bl-full -z-10 transition-transform group-hover:scale-110"></div>
           <div className="flex items-center justify-between">
-            <p className="text-slate-500 font-medium text-sm">Tổng thu nhập (Tất cả)</p>
+            <p className="text-slate-500 font-medium text-sm">Thu nhập tháng {selectedMonth}/{selectedYear}</p>
             <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 shadow-inner">
               <TrendingUp className="w-5 h-5" />
             </div>
@@ -69,7 +105,7 @@ export default function ReportsPage() {
         <div className="bg-white rounded-3xl p-7 border border-slate-200 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
           <div className="absolute right-0 top-0 w-32 h-32 bg-red-50 rounded-bl-full -z-10 transition-transform group-hover:scale-110"></div>
           <div className="flex items-center justify-between">
-            <p className="text-slate-500 font-medium text-sm">Tổng chi tiêu (Tất cả)</p>
+            <p className="text-slate-500 font-medium text-sm">Chi tiêu tháng {selectedMonth}/{selectedYear}</p>
             <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 shadow-inner">
               <TrendingDown className="w-5 h-5" />
             </div>
@@ -82,7 +118,7 @@ export default function ReportsPage() {
         <div className="bg-gradient-to-br from-slate-900 via-slate-800 to-blue-900 rounded-3xl p-7 text-white shadow-xl shadow-slate-900/20 relative overflow-hidden group">
           <div className="absolute right-0 top-0 w-32 h-32 bg-white/5 rounded-bl-full transition-transform group-hover:scale-110"></div>
           <div className="flex items-center justify-between relative z-10">
-            <p className="text-slate-300 font-medium text-sm">Tổng tiết kiệm được</p>
+            <p className="text-slate-300 font-medium text-sm">Tiết kiệm tháng {selectedMonth}/{selectedYear}</p>
             <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-yellow-500 shadow-inner backdrop-blur-sm">
               <LayoutDashboard className="w-5 h-5" />
             </div>
@@ -132,49 +168,99 @@ export default function ReportsPage() {
         </div>
       </div>
 
-      {/* Data Table */}
-      <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
-          <h3 className="text-lg font-bold text-slate-900 tracking-tight">Chi tiết từng tháng</h3>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left">
-            <thead className="text-xs text-slate-500 uppercase bg-slate-50 font-bold tracking-wider">
-              <tr>
-                <th className="px-6 py-4">Thời gian</th>
-                <th className="px-6 py-4 text-right">Thu nhập</th>
-                <th className="px-6 py-4 text-right">Chi tiêu</th>
-                <th className="px-6 py-4 text-right">Thực nhận</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {monthlyReports?.map((report, idx) => (
-                <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
-                  <td className="px-6 py-4 font-bold text-slate-900">
-                    Tháng {report.month}/{report.year}
-                  </td>
-                  <td className="px-6 py-4 text-right font-bold text-green-600">
-                    {formatCurrency(report.income)}
-                  </td>
-                  <td className="px-6 py-4 text-right font-bold text-red-500">
-                    {formatCurrency(report.expense)}
-                  </td>
-                  <td className="px-6 py-4 text-right font-bold text-slate-900">
-                    <span className={`px-3 py-1 rounded-lg text-xs ${report.net >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                      {report.net >= 0 ? '+' : ''}{formatCurrency(report.net)}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-              {!monthlyReports?.length && (
+      {/* Two columns for Data Table and Category breakdown */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Data Table */}
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden h-full">
+          <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+            <h3 className="text-lg font-bold text-slate-900 tracking-tight">Chi tiết từng tháng</h3>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead className="text-xs text-slate-500 uppercase bg-slate-50 font-bold tracking-wider">
                 <tr>
-                  <td colSpan={4} className="px-6 py-8 text-center text-slate-500 font-medium">
-                    Chưa có dữ liệu báo cáo
-                  </td>
+                  <th className="px-6 py-4">Thời gian</th>
+                  <th className="px-6 py-4 text-right">Thu nhập</th>
+                  <th className="px-6 py-4 text-right">Chi tiêu</th>
+                  <th className="px-6 py-4 text-right">Thực nhận</th>
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {monthlyReports?.map((report, idx) => (
+                  <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
+                    <td className="px-6 py-4 font-bold text-slate-900">
+                      Tháng {report.month}/{report.year}
+                    </td>
+                    <td className="px-6 py-4 text-right font-bold text-green-600">
+                      {formatCurrency(report.income)}
+                    </td>
+                    <td className="px-6 py-4 text-right font-bold text-red-500">
+                      {formatCurrency(report.expense)}
+                    </td>
+                    <td className="px-6 py-4 text-right font-bold text-slate-900">
+                      <span className={`px-3 py-1 rounded-lg text-xs ${report.net >= 0 ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                        {report.net >= 0 ? '+' : ''}{formatCurrency(report.net)}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+                {!monthlyReports?.length && (
+                  <tr>
+                    <td colSpan={4} className="px-6 py-8 text-center text-slate-500 font-medium">
+                      Chưa có dữ liệu báo cáo
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Category Expenses Breakdown */}
+        <div className="bg-white rounded-3xl p-7 border border-slate-200 shadow-sm h-full flex flex-col">
+          <h3 className="text-xl font-bold text-slate-900 tracking-tight mb-6">Chi tiêu theo danh mục tháng {selectedMonth}/{selectedYear}</h3>
+          
+          {categoryExpenses && categoryExpenses.length > 0 ? (
+            <div className="space-y-5 flex-1 overflow-y-auto pr-2 custom-scrollbar">
+              {categoryExpenses.map((cat, idx) => (
+                <div key={idx} className="group">
+                  <div className="flex justify-between items-end mb-2">
+                    <div className="flex items-center gap-3">
+                      <div 
+                        className="w-10 h-10 rounded-xl flex items-center justify-center text-white shadow-sm transition-transform group-hover:scale-110"
+                        style={{ backgroundColor: cat.categoryColor || '#94a3b8' }}
+                      >
+                        <i className={`fa-solid ${cat.categoryIcon || 'fa-tags'} text-sm`}></i>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-slate-900">{cat.categoryName}</p>
+                        <p className="text-xs text-slate-500 font-medium mt-0.5">{cat.percentage.toFixed(1)}%</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold text-slate-900">{formatCurrency(cat.amount)}</p>
+                    </div>
+                  </div>
+                  <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full rounded-full transition-all duration-1000 ease-out"
+                      style={{ 
+                        width: `${cat.percentage}%`,
+                        backgroundColor: cat.categoryColor || '#94a3b8'
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex-1 flex flex-col items-center justify-center text-slate-500 space-y-4">
+              <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center">
+                <i className="fa-solid fa-receipt text-2xl text-slate-400"></i>
+              </div>
+              <p className="font-medium">Chưa có dữ liệu chi tiêu</p>
+            </div>
+          )}
         </div>
       </div>
     </div>

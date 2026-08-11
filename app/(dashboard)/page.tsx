@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowDownRight, ArrowUpRight, CreditCard, DollarSign, Wallet, Loader2 } from 'lucide-react';
+import { ArrowDownRight, ArrowUpRight, CreditCard, Wallet, Loader2 } from 'lucide-react';
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
 import { reportsService } from '@/services/reports.service';
@@ -8,10 +8,14 @@ import { transactionService } from '@/services/transactions.service';
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
 import { CATEGORY_ICONS } from '@/constants/categories';
-import { formatCurrency } from '@/lib/utils';
 import Link from 'next/link';
+import { useState } from 'react';
+
+type ChartPeriod = 'week' | 'month' | 'year';
 
 export default function DashboardPage() {
+  const [chartPeriod, setChartPeriod] = useState<ChartPeriod>('week');
+
   const { data: summary, isLoading: isLoadingSummary } = useQuery({
     queryKey: ['dashboardSummary'],
     queryFn: () => reportsService.getDashboardSummary(),
@@ -22,11 +26,33 @@ export default function DashboardPage() {
     queryFn: () => transactionService.getTransactions({ page: 1, pageSize: 5 }),
   });
 
-  const chartData = summary?.dailyTrend.map(d => ({
-    name: format(new Date(d.date), 'dd/MM'),
-    income: d.income,
-    expense: d.expense
-  })) || [];
+  const { data: monthlyReports, isLoading: isLoadingMonthlyReports } = useQuery({
+    queryKey: ['monthlyReports'],
+    queryFn: () => reportsService.getMonthlyReport(),
+    enabled: chartPeriod === 'year',
+  });
+
+  const now = new Date();
+  const startOfCurrentWeek = new Date(now);
+  const dayOfWeek = now.getDay();
+  startOfCurrentWeek.setDate(now.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
+  startOfCurrentWeek.setHours(0, 0, 0, 0);
+
+  const chartData = chartPeriod === 'year'
+    ? (monthlyReports || [])
+        .filter(report => report.year === now.getFullYear())
+        .map(report => ({
+          name: `Tháng ${report.month}`,
+          income: report.income,
+          expense: report.expense,
+        }))
+    : (summary?.dailyTrend || [])
+        .filter(day => chartPeriod === 'month' || new Date(`${day.date}T00:00:00`) >= startOfCurrentWeek)
+        .map(day => ({
+          name: format(new Date(`${day.date}T00:00:00`), 'dd/MM'),
+          income: day.income,
+          expense: day.expense,
+        }));
 
   if (isLoadingSummary || isLoadingTx) {
     return (
@@ -101,13 +127,23 @@ export default function DashboardPage() {
         <div className="lg:col-span-2 bg-white rounded-3xl p-7 border border-slate-200 shadow-sm">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-xl font-bold text-slate-900 tracking-tight">Biểu đồ Thu / Chi</h3>
-            <select className="text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 font-medium text-slate-600 px-4 py-2 outline-none cursor-pointer transition-all hover:bg-slate-100">
-              <option>Tuần này</option>
-              <option>Tháng này</option>
-              <option>Năm nay</option>
+            <select
+              value={chartPeriod}
+              onChange={(event) => setChartPeriod(event.target.value as ChartPeriod)}
+              aria-label="Chọn khoảng thời gian biểu đồ"
+              className="text-sm bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 font-medium text-slate-600 px-4 py-2 outline-none cursor-pointer transition-all hover:bg-slate-100"
+            >
+              <option value="week">Tuần này</option>
+              <option value="month">Tháng này</option>
+              <option value="year">Năm nay</option>
             </select>
           </div>
           <div className="h-72 w-full">
+            {isLoadingMonthlyReports && chartPeriod === 'year' ? (
+              <div className="flex h-full items-center justify-center">
+                <Loader2 className="h-7 w-7 animate-spin text-slate-500" />
+              </div>
+            ) : (
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
                 <defs>
@@ -131,6 +167,7 @@ export default function DashboardPage() {
                 <Area type="monotone" dataKey="expense" name="Chi" stroke="#DC2626" strokeWidth={3} fillOpacity={1} fill="url(#colorExpense)" />
               </AreaChart>
             </ResponsiveContainer>
+            )}
           </div>
         </div>
 
