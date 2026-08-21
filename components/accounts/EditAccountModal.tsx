@@ -25,14 +25,14 @@ interface EditAccountModalProps {
 }
 
 const COLORS = [
-  'bg-blue-500',
-  'bg-green-500',
-  'bg-red-500',
-  'bg-yellow-500',
-  'bg-purple-500',
-  'bg-pink-500',
-  'bg-slate-500',
-  'bg-teal-500',
+  '#3b82f6',
+  '#10b981',
+  '#ef4444',
+  '#f59e0b',
+  '#8b5cf6',
+  '#ec4899',
+  '#64748b',
+  '#14b8a6',
 ];
 
 const ICONS = [
@@ -160,9 +160,10 @@ export function EditAccountModal({ isOpen, onClose, account }: EditAccountModalP
                   key={color}
                   type="button"
                   onClick={() => setValue('color', color)}
-                  className={`w-10 h-10 rounded-full flex items-center justify-center transition-transform ${color} ${
+                  className={`w-10 h-10 rounded-full flex items-center justify-center transition-transform ${
                     selectedColor === color ? 'ring-4 ring-offset-2 ring-slate-900 scale-110' : 'hover:scale-110'
                   }`}
+                  style={{ backgroundColor: color }}
                 >
                   {selectedColor === color && <Check className="w-5 h-5 text-white" />}
                 </button>
